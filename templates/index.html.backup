@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Hackathon Harvester - All Active Hackathons{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-justify-between flex-items-center mb-4">
+    <div>
+        <h1 class="page-title">🏆 Active Hackathons</h1>
+        <p class="page-description">
+            Automatically updated every 6 hours with the latest hackathons from Unstop, Devfolio, HackerEarth, and other
+            platforms.
+            Expired hackathons are automatically removed.
+        </p>
+    </div>
+</div>
+
+<!-- Auto Update Status -->
+<div class="alert alert-info mb-4">
+    <i class="fas fa-clock mr-2"></i>
+    <strong>Auto-Update:</strong> New hackathons are added every 6 hours and expired ones are removed automatically.
+    <br>
+    <small>Last updated: {% if hackathons and hackathons[0].scraped_at %}{{ hackathons[0].scraped_at.strftime('%Y-%m-%d
+        %H:%M UTC') }}{% else %}Not available{% endif %}</small>
+</div>
+
+<!-- Stats Section -->
+<div class="d-flex flex-wrap gap-4 mb-4">
+    <div class="d-flex flex-items-center">
+        <i class="fas fa-trophy text-yellow mr-2"></i>
+        <span class="text-bold">{{ hackathons|length }}</span>
+        <span class="text-gray ml-1">Active Hackathons</span>
+    </div>
+    <div class="d-flex flex-items-center">
+        <i class="fas fa-clock text-blue mr-2"></i>
+        <span class="text-bold">{{ hackathons|selectattr("status", "equalto", "open")|list|length }}</span>
+        <span class="text-gray ml-1">Open for Registration</span>
+    </div>
+    <div class="d-flex flex-items-center">
+        <i class="fas fa-calendar text-green mr-2"></i>
+        <span class="text-bold">{{ hackathons|selectattr("status", "equalto", "upcoming")|list|length }}</span>
+        <span class="text-gray ml-1">Upcoming</span>
+    </div>
+</div>
+
+<!-- Hackathons List -->
+{% if hackathons %}
+<div class="hackathon-list">
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">Hackathon Details</th>
+                    <th style="width: 15%;">End Date</th>
+                    <th style="width: 15%;">Platform</th>
+                    <th style="width: 20%;">Registration</th>
+                    <th style="width: 10%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hackathon in hackathons %}
+                <tr>
+                    <td>
+                        <div class="hackathon-info">
+                            <div class="d-flex flex-items-center mb-1">
+                                <i class="fas fa-trophy text-yellow mr-2"></i>
+                                <strong class="hackathon-title">
+                                    <a href="{{ url_for('search_hackathon', hackathon_id=hackathon._id) }}"
+                                        target="_blank" class="hackathon-title-link"
+                                        title="Search for {{ hackathon.title }} on Google" rel="noopener noreferrer">
+                                        {{ hackathon.title }}
+                                    </a>
+                                </strong>
+                            </div>
+                            {% if hackathon.description %}
+                            <div class="hackathon-description text-small text-gray">
+                                {{ hackathon.description[:100] }}{% if hackathon.description|length > 100 %}...{% endif
+                                %}
+                            </div>
+                            {% endif %}
+                            {% if hackathon.status %}
+                            <div class="mt-1">
+                                <span class="status-badge status-{{ hackathon.status }}">
+                                    {{ hackathon.status|title }}
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        {% if hackathon.end_date and hackathon.end_date != 'TBD' %}
+                        <div class="d-flex flex-items-center">
+                            <i class="fas fa-calendar-alt text-blue mr-1"></i>
+                            <span class="font-mono">{{ hackathon.end_date }}</span>
+                        </div>
+                        {% else %}
+                        <span class="text-gray">TBD</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if hackathon.platform %}
+                        <span class="platform-badge">{{ hackathon.platform|title }}</span>
+                        {% else %}
+                        <span class="text-gray">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if hackathon.website_url %}
+                        <a href="{{ hackathon.website_url }}" target="_blank" class="btn btn-sm btn-primary"
+                            rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt mr-1"></i>Apply Now
+                        </a>
+                        {% else %}
+                        <span class="text-gray">No link available</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button onclick="deleteHackathon('{{ hackathon._id }}')" class="btn btn-sm btn-danger"
+                            title="Delete this hackathon">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="fas fa-calendar-times fa-3x mb-3" style="color: var(--color-fg-muted);"></i>
+    <h3>No Active Hackathons</h3>
+    <p>The system is currently fetching the latest hackathons. New hackathons are added automatically every 6 hours.</p>
+    <small class="text-gray">Next update in approximately {{ (6 - ((24 - hackathons[0].scraped_at.hour) % 6)) if
+        hackathons else 'N/A' }} hours</small>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="alert alert-error">
+    <i class="fas fa-exclamation-circle mr-2"></i>
+    {{ error }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function deleteHackathon(hackathonId) {
+        if (!confirm('Are you sure you want to delete this hackathon?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/delete/${hackathonId}`, {
+                method: 'POST'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Remove the row from the table
+                const row = document.querySelector(`button[onclick="deleteHackathon('${hackathonId}')"]`).closest('tr');
+                row.style.transition = 'opacity 0.3s ease';
+                row.style.opacity = '0';
+                setTimeout(() => {
+                    row.remove();
+                    // Update stats
+                    const totalCount = document.querySelector('.text-bold');
+                    if (totalCount) {
+                        totalCount.textContent = parseInt(totalCount.textContent) - 1;
+                    }
+                }, 300);
+            } else {
+                alert('Error deleting hackathon: ' + result.error);
+            }
+        } catch (error) {
+            alert('Network error: ' + error.message);
+        }
+    }
+
+    // Auto-refresh page every 1 hour to show updated data
+    setInterval(() => {
+        // Only refresh if no button is being clicked
+        if (!document.activeElement || document.activeElement.tagName === 'BODY') {
+            window.location.reload();
+        }
+    }, 3600000); // 1 hour
+
+    // Show next auto-update countdown in title
+    function updateCountdown() {
+        const lastUpdate = new Date('{% if hackathons and hackathons[0].scraped_at %}{{ hackathons[0].scraped_at.isoformat() }}{% endif %}');
+        if (lastUpdate) {
+            const nextUpdate = new Date(lastUpdate.getTime() + (6 * 60 * 60 * 1000)); // 6 hours later
+            const now = new Date();
+            const timeUntilUpdate = nextUpdate - now;
+
+            if (timeUntilUpdate > 0) {
+                const hours = Math.floor(timeUntilUpdate / (1000 * 60 * 60));
+                const minutes = Math.floor((timeUntilUpdate % (1000 * 60 * 60)) / (1000 * 60));
+                document.title = `(${hours}h ${minutes}m) Active Hackathons`;
+            }
+        }
+    }
+
+    // Update countdown every minute
+    if ('{% if hackathons and hackathons[0].scraped_at %}true{% endif %}') {
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+    }
+</script>
+{% endblock %}

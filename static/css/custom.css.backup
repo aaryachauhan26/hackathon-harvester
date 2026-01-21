@@ -1,0 +1,530 @@
+/* GitHub Docs Style Enhancements */
+
+/* Alert Messages (updated from flash) */
+.alert {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+}
+
+.alert-success {
+    color: #1a7f37;
+    background-color: #dafbe1;
+    border-color: #2da44e;
+}
+
+.alert-error {
+    color: #d1242f;
+    background-color: #ffebe9;
+    border-color: #f85149;
+}
+
+.alert-warning {
+    color: #9a6700;
+    background-color: #fff8c5;
+    border-color: #d4a72c;
+}
+
+.alert-info {
+    color: #0969da;
+    background-color: #ddf4ff;
+    border-color: #54aeff;
+}
+
+/* Flash Messages (legacy support) */
+.flash {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+}
+
+.flash-success {
+    color: #1a7f37;
+    background-color: #dafbe1;
+    border-color: #2da44e;
+}
+
+.flash-error {
+    color: #d1242f;
+    background-color: #ffebe9;
+    border-color: #f85149;
+}
+
+.flash-warn {
+    color: #9a6700;
+    background-color: #fff8c5;
+    border-color: #d4a72c;
+}
+
+.flash-info {
+    color: #0969da;
+    background-color: #ddf4ff;
+    border-color: #54aeff;
+}
+
+/* Table Container */
+.table-container {
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--color-canvas-default);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.table th {
+    background: var(--color-canvas-subtle);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-border-default);
+    color: var(--color-fg-default);
+}
+
+.table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border-muted);
+    vertical-align: top;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover {
+    background: var(--color-canvas-subtle);
+}
+
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-open {
+    background: #2da44e;
+    color: white;
+    animation: pulse-green 2s infinite;
+}
+
+.status-upcoming {
+    background: #1f6feb;
+    color: white;
+}
+
+.status-closed {
+    background: #656d76;
+    color: white;
+}
+
+/* Platform Badge */
+.platform-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: var(--color-accent-subtle);
+    color: var(--color-accent-fg);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Hackathon Title Link */
+.hackathon-title-link {
+    color: var(--color-accent-fg);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+    position: relative;
+}
+
+.hackathon-title-link:hover {
+    color: var(--color-accent-emphasis);
+    text-decoration: underline;
+}
+
+.hackathon-title-link:visited {
+    color: var(--color-done-fg);
+}
+
+.hackathon-title-link::after {
+    content: "🔍";
+    font-size: 0.8em;
+    margin-left: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.hackathon-title-link:hover::after {
+    opacity: 0.7;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        display: none;
+        /* Hide platform column on mobile */
+    }
+}
+
+/* Loading States */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    background-color: var(--color-canvas-default);
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.spinner {
+    border: 3px solid var(--color-border-default);
+    border-top: 3px solid var(--color-accent-emphasis);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced Card Hover Effects */
+.hackathon-card {
+    transition: all 0.2s ease;
+}
+
+.hackathon-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Status Badge Animations */
+.status-badge {
+    transition: all 0.2s ease;
+}
+
+.status-open {
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Form Enhancements */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-control:invalid {
+    border-color: var(--color-danger-fg);
+}
+
+.form-control:valid {
+    border-color: var(--color-success-fg);
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-group .btn {
+    margin: 0;
+}
+
+/* Responsive Grid */
+@media (max-width: 768px) {
+    .d-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hackathon-actions {
+        flex-direction: column;
+    }
+
+    .hackathon-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: var(--color-neutral-emphasis-plus);
+    color: var(--color-fg-on-emphasis);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Search Box Enhancements */
+.search-container {
+    position: relative;
+}
+
+.search-container .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-fg-muted);
+}
+
+.search-container .form-control {
+    padding-left: 36px;
+}
+
+/* Progress Bar */
+.progress {
+    width: 100%;
+    height: 6px;
+    background-color: var(--color-canvas-subtle);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--color-accent-emphasis);
+    transition: width 0.3s ease;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: var(--color-canvas-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border-default);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--color-fg-muted);
+}
+
+/* Dark mode improvements */
+[data-color-mode="dark"] .hackathon-card:hover {
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+}
+
+/* Print styles */
+@media print {
+
+    .header,
+    .btn,
+    .hackathon-actions {
+        display: none !important;
+    }
+
+    .hackathon-card {
+        break-inside: avoid;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles */
+.btn:focus,
+.form-control:focus {
+    outline: 2px solid var(--color-accent-emphasis);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+
+    .status-badge {
+        border: 1px solid currentColor;
+    }
+}
+
+/* Enhanced Hackathon Display */
+.hackathon-info {
+    max-width: 100%;
+}
+
+.hackathon-title {
+    color: var(--color-fg-default);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.hackathon-description {
+    margin-top: 4px;
+    line-height: 1.3;
+    color: var(--color-fg-muted);
+}
+
+.font-mono {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Button hover effects */
+.btn-sm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger:hover {
+    background-color: #d1242f;
+    border-color: #d1242f;
+}
+
+/* Table row hover effect */
+.table tbody tr:hover {
+    background-color: var(--color-canvas-subtle);
+    transition: background-color 0.15s ease;
+}
+
+/* Delete button styling */
+.btn-danger {
+    background-color: #da3633;
+    border-color: #da3633;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b92a27;
+    border-color: #b92a27;
+}
+
+/* Smooth animations */
+.table tbody tr {
+    transition: all 0.15s ease;
+}
+
+/* Empty state improvements */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-canvas-subtle);
+    border-radius: 8px;
+    margin: 20px 0;
+}
